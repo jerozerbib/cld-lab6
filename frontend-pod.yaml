@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: frontend
+  labels:
+    component: api
+    app: todo
+spec:
+  containers:
+  - name: api
+    image: icclabcna/ccp2-k8s-todo-frontend
+    ports:
+    - containerPort: 8080
+    resources:
+      limits:
+        cpu: 300m
+    env:
+    - name: API_ENDPOINT_URL
+      value: 10.0.0.108

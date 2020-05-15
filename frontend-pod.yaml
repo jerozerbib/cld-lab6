@@ -16,4 +16,4 @@ spec:
         cpu: 300m
     env:
     - name: API_ENDPOINT_URL
-      value: http://10.77.13.128:8081
+      value: http://10.77.2.156:8081

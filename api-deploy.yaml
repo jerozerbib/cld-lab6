@@ -1,0 +1,30 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: api-deploy
+  labels:
+    component: api
+    app: todo
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: todo
+  template:
+    metadata:
+      labels:
+        app: todo
+    spec:
+      containers:
+      - name: api
+        image: icclabcna/ccp2-k8s-todo-app
+        ports:
+        - containerPort: 8081
+        resources:
+          limits:
+            cpu: 300m
+          env:
+          - name: REDIS_ENDPOINT
+            value: redis-svc
+          - name: REDIS_PWD
+            value: ccp2

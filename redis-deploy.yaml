@@ -1,7 +1,7 @@
 apiVersion: apps/v1beta1
 kind: Deployment
 metadata:
-  name: redis-deploy
+  name: redis
   labels:
     component: redis
     app: todo
@@ -18,7 +18,7 @@ spec:
         component: redis
     spec:
       containers:
-      - name: redis-deploy
+      - name: redis
         image: redis
         ports:
         - containerPort: 6379

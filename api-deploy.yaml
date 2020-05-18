@@ -1,7 +1,7 @@
 apiVersion: apps/v1beta1
 kind: Deployment
 metadata:
-  name: api-deploy
+  name: api
   labels:
     component: api
     app: todo

@@ -1,7 +1,7 @@
 apiVersion: apps/v1beta1
 kind: Deployment
 metadata:
-  name: redis
+  name: redis-deploy
   labels:
     component: redis
     app: todo
@@ -10,13 +10,15 @@ spec:
   selector:
     matchLabels:
       app: todo
+      component: redis
   template:
     metadata:
       labels:
         app: todo
+        component: redis
     spec:
       containers:
-      - name: redis
+      - name: redis-deploy
         image: redis
         ports:
         - containerPort: 6379

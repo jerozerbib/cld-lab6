@@ -1,7 +1,7 @@
 apiVersion: apps/v1beta1
 kind: Deployment
 metadata:
-  name: front
+  name: front-deploy
   labels:
     component: frontend
     app: todo
@@ -10,13 +10,15 @@ spec:
   selector:
     matchLabels:
       app: todo
+      component: frontend
   template:
     metadata:
       labels:
         app: todo
+        component: frontend
     spec:
       containers:
-      - name: front
+      - name: front-deploy
         image: icclabcna/ccp2-k8s-todo-frontend
         ports:
         - containerPort: 8080
@@ -25,4 +27,4 @@ spec:
             cpu: 300m
           env:
           - name: API_ENDPOINT_URL
-            value: http://10.77.2.156:8081
+            value: http://10.77.5.510.77.5.5:8081

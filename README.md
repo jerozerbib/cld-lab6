@@ -76,3 +76,43 @@ spec:
 
 ## Task 3 - Add and exercise resilience
 
+```bash
+NAME                     READY     STATUS    		RESTARTS   	AGE
+api-68484bc867-vqkzb     1/1       Running   		   0         1m
+api-68484bc867-wlsvm     1/1       Running   		   0         1m
+front-54966d7858-94v9z   1/1       Running   		   0         1m
+front-54966d7858-qwpx2   1/1       Running   		   0         1m
+redis-795cb4457b-jspqj   1/1       Running   		   0         2m
+front-54966d7858-94v9z   1/1       Terminating  	   0         2m
+front-54966d7858-2bntz   0/1       Pending   		   0         35s
+front-54966d7858-2bntz   0/1       Pending   		   0         35s
+front-54966d7858-2bntz   0/1       ContainerCreating   0         35s
+front-54966d7858-94v9z   0/1       Terminating   	   0         2m
+front-54966d7858-94v9z   0/1       Terminating   	   0         2m
+front-54966d7858-94v9z   0/1       Terminating   	   0         2m
+front-54966d7858-2bntz   1/1       Running   		   0         35s
+redis-795cb4457b-jspqj   1/1       Terminating   	   0         3m
+redis-795cb4457b-8ffs9   0/1       Pending   		   0         35s
+redis-795cb4457b-8ffs9   0/1       Pending   		   0         35s
+redis-795cb4457b-8ffs9   0/1       ContainerCreating   0         36s
+redis-795cb4457b-jspqj   0/1       Terminating   	   0         3m
+redis-795cb4457b-8ffs9   1/1       Running   		   0         36s
+redis-795cb4457b-jspqj   0/1       Terminating   	   0         3m
+redis-795cb4457b-jspqj   0/1       Terminating   	   0         3m
+```
+
+### Task 3.2
+
+- What happens if you delete a Frontend or API Pod? How long does it take for the system to react?
+  - Cela prend environ 35 secondes pour que le système réagisse et crée un nouveau Pod.
+- What happens when you delete the Redis Pod?
+  - Quand un pod Redis est supprimé, Google en crée un autre, et ensuite supprime le Pod souhaité afin de ne pas laisser le service tourné sans Pods
+- How can you change the number of instances temporarily to 3? Hint: look for scaling in the deployment documentation
+  - En tapant la commande suivante, par exemple :`kubectl scale deployment.v1.apps/front-deployment --replicas=3`.  
+- What autoscaling features are available? Which metrics are used?
+  - Les fonctionnalités d'autoscaling sont :
+    - `min` : Nombres de Pods min
+    - `max` : Nombres de Pods max
+    - `cpu-percent` La base de pourcentage des pods existants
+- How can you update a component? (see "Updating a Deployment" in the deployment documentation)
+  - 

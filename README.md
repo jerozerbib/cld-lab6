@@ -8,20 +8,20 @@
 
 Document any difficulties you faced and how you overcame them. Copy the object descriptions into the lab report.
 
-Quand on a essayé de déployer Redis en utilisant les fichiers `.yaml` nous avons eu l'erreur suivante : 
+Quand nous avons essayé de déployer Redis en utilisant les fichiers `.yaml` nous avons eu l'erreur suivante : 
 ```bash
 error: error validating "https://raw.githubusercontent.com/kubernetes/heapster/master/deploy/kube-config/rbac/heapster-rbac.yaml": error validating data: unknown object type schema.GroupVersionKind{Group:"rbac.authorization.k8s.io", Version:"v1beta1", Kind:"ClusterRoleBinding"}; if you choose to ignore these errors, turn validation off with --validate=false
 ```
-Après avoir cherché une solution (aussi indiqué dans le message d'erreur), on a decidé d'ajouter le paramètre `--validate=false`. La commande est donc :
+Après avoir cherché une solution (aussi indiqué dans le message d'erreur), nous avons decidé d'ajouter le paramètre `--validate=false`. La commande est donc :
 ```bash
 kubectl create -f redis-svc.yaml --validate=false
 ```
 Même chose pour la commande d'après avec `redis-pod.yaml`
 
-Nous avons également eu du mal lors du déploiement du `api-pod.yaml` car nous étions pas certain des informations que l'on devait mettre dedans. En effet nous savions pas si l'attribut `component` devait avoir comme value `api` ou `redis`. Après avoir essayé avec `api` nous avons vu une erreur lors du déploiement : `Containers with unready status` nous avons changé pour `redis` et cela a marché.
+Nous avons également eu du mal lors du déploiement du `api-pod.yaml` car nous n'étions pas certain des informations que l'on devait mettre dedans. En effet nous ne savions pas si l'attribut `component` devait avoir comme value `api` ou `redis`. Après avoir essayé avec `api`, nous avons vu une erreur lors du déploiement : `Containers with unready status`. Nous avons donc changé pour `redis` et tout a fonctionné.
 
 	Copy the object descriptions into the lab report : `api-pod.yaml`
-```
+```yaml
 apiVersion: v1
 kind: Pod
 metadata:
@@ -43,14 +43,13 @@ spec:
       value: redis-svc
     - name: REDIS_PWD
       value: ccp2
-
 ```
 ### DEPLOY THE FRONTEND POD 
 
 Pour le `frontend-pod.yaml` la valeur de la variable d'environnement `API_ENDPOINT_URL` doit être l'IP du svc qui est retrouvable dans le dashboard, c'est à dire : 10.0.0.108
 
 	Copy the object descriptions into the lab report : `frontend-pod.yaml`
-```
+```yaml
 apiVersion: v1
 kind: Pod
 metadata:
@@ -69,10 +68,36 @@ spec:
         cpu: 300m
     env:
     - name: API_ENDPOINT_URL
-      value: 10.0.0.108
+      value: http://api-svc:8081
 ```
 
 ## Task 2 - Deploy the application in kubernetes engine
+
+`frontend-svc`
+
+```yaml
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    component: frontend
+  name: frontend-svc
+spec:
+  ports:
+  - port: 80
+    targetPort: 8080
+    name: frontend
+  selector:
+    app: todo
+    component: frontend
+  type: LoadBalancer
+```
+
+Les autres fichiers de configurations sont inchangés.
+
+Lors de cette étape, nous avons eu quelques difficultés liées à la taille du cluster. La donnée souhaitait que l'on assigne une taille de 2 alors qu'une taille de 6 était nécessaire.
+
+**TODO : Refaire l'étape et prendre des screenshots !**
 
 ## Task 3 - Add and exercise resilience
 
